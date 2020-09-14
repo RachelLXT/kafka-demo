@@ -57,8 +57,8 @@
 `kafka_exporter --kafka.server=localhost:9092 --web.listen-address=":9308" & kafka_exporter --kafka.server=localhost:9093 --web.listen-address=":8308" & kafka_exporter --kafka.server=localhost:9094 --web.listen-address=":7308"`  
 
 - 启动Prometheus  
-`prometheus --config.file=prometheus.yml --web.enable-lifecycle`
-    ![prometheus](https://github.com/RachelLXT/kafka-demo/blob/master/doc/pic/prometheus.png)  
+`prometheus --config.file=prometheus.yml --web.enable-lifecycle`  
+    ![prometheus](https://github.com/RachelLXT/kafka-demo/raw/master/doc/pic/prometheus.png)  
 
 - 启动Grafana  
 `brew services start grafana`
@@ -66,11 +66,11 @@
 - grafana导入kafka监控面板(消费者客户端跑起来监控面板才有数据)  
     [Dashboard](https://grafana.com/grafana/dashboards/7589/revisions)导入流程:
 
-    ![导入Dashboard](https://github.com/RachelLXT/kafka-demo/blob/master/doc/pic/prometheus.png/doc/pic/import1.png)   
+    ![导入Dashboard](https://github.com/RachelLXT/kafka-demo/raw/master/doc/pic/import1.png)   
 
-    ![导入Dashboard](https://github.com/RachelLXT/kafka-demo/blob/master/doc/pic/prometheus.png/doc/pic/import2.png) 
+    ![导入Dashboard](https://github.com/RachelLXT/kafka-demo/raw/master/doc/pic/import2.png) 
     
-    ![导入Dashboard](https://github.com/RachelLXT/kafka-demo/blob/master/doc/pic/prometheus.png/doc/pic/dashboard.png)  
+    ![导入Dashboard](https://github.com/RachelLXT/kafka-demo/raw/master/doc/pic/dashboard.png)  
     
 
 
