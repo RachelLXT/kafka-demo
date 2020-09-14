@@ -26,7 +26,7 @@ public class KafkaDemo {
 
     public void send(String data) {
         try {
-            ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(MY_GROUP_TOPIC, data);
+            ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(MY_FIRST_TOPIC, data);
             SendResult<String, String> result = future.get();
             log.info("send msg:{}, topic:{}, partition:{}, key:{}", data, result.getProducerRecord().topic(),
                     result.getProducerRecord().partition(), result.getProducerRecord().key());
@@ -36,7 +36,12 @@ public class KafkaDemo {
     }
 
     public void send() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10000; i++) {
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             kafkaTemplate.send(MY_GROUP_TOPIC, i % 3, "sendKey", "message" + i);
         }
     }

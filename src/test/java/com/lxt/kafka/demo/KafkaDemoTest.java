@@ -1,6 +1,7 @@
 package com.lxt.kafka.demo;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,15 +18,16 @@ class KafkaDemoTest {
     private KafkaDemo kafkaDemo;
 
     @Test
-    void sendData() {
-        for (int i = 0; i < 10; i++) {
+    @Timeout(3600)
+    void sendData() throws InterruptedException {
+        for (int i = 0; i < 10000; i++) {
+            Thread.sleep(15);
             kafkaDemo.send(i + "");
         }
-//        kafkaConfig.send("hello, david!");
-//        kafkaConfig.send();
     }
 
     @Test
+    @Timeout(3600)
     void send() {
         kafkaDemo.send();
     }
