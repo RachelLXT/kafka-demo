@@ -58,7 +58,7 @@
 
 - 启动Prometheus  
 `prometheus --config.file=prometheus.yml --web.enable-lifecycle`
-    ![prometheus](doc/pic/prometheus.png)  
+    ![prometheus](./doc/pic/prometheus.png)  
 
 - 启动Grafana  
 `brew services start grafana`
@@ -66,11 +66,11 @@
 - grafana导入kafka监控面板(消费者客户端跑起来监控面板才有数据)  
     [Dashboard](https://grafana.com/grafana/dashboards/7589/revisions)导入流程:
 
-    ![导入Dashboard](doc/pic/import1.png)   
+    ![导入Dashboard](./doc/pic/import1.png)   
 
-    ![导入Dashboard](doc/pic/import2.png) 
+    ![导入Dashboard](./doc/pic/import2.png) 
     
-    ![导入Dashboard](doc/pic/dashboard.png)  
+    ![导入Dashboard](./doc/pic/dashboard.png)  
     
 
 
