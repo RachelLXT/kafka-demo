@@ -16,7 +16,7 @@ import java.util.Optional;
  */
 @Configuration
 @Slf4j
-public class KafkaConfig {
+public class KafkaDemo {
 
     private static final String MY_FIRST_TOPIC = "my-first-topic";
     private static final String MY_GROUP_TOPIC = "my-group-topic";

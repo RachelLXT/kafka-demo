@@ -11,15 +11,15 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class KafkaConfigTest {
+class KafkaDemoTest {
 
     @Autowired
-    private KafkaConfig kafkaConfig;
+    private KafkaDemo kafkaDemo;
 
     @Test
     void sendData() {
         for (int i = 0; i < 10; i++) {
-            kafkaConfig.send(i + "");
+            kafkaDemo.send(i + "");
         }
 //        kafkaConfig.send("hello, david!");
 //        kafkaConfig.send();
@@ -27,6 +27,6 @@ class KafkaConfigTest {
 
     @Test
     void send() {
-        kafkaConfig.send();
+        kafkaDemo.send();
     }
 }
