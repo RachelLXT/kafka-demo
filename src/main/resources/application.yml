@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: kafka-demo
+  datasource:
+    url: jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=UTF-8&Timezone=Asia/Shanghai
+    username: root
+    password: lxtykx0106
+    driver-class-name: com.mysql.cj.jdbc.Driver
   kafka:
     bootstrap-servers: localhost:9092
     listener:
@@ -17,3 +22,17 @@ spring:
       auto-commit-interval: 1000
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+binlog:
+  host: 127.0.0.1
+  port: 3306
+  username: root
+  password: lxtykx0106
+  filename: binlog.000010
+  position: 1928285
+  heartbeatInterval: 3000
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true

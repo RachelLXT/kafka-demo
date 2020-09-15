@@ -48,7 +48,7 @@
       - targets: ['127.0.0.1:9308','127.0.0.1:8308','127.0.0.1:7308']
         labels:
           instance: localhost
-```` 
+````
 - 下载exporter  
 `wget https://github.com/danielqsj/kafka_exporter/releases/download/v1.2.0/kafka_exporter-1.2.0.darwin-amd64.tar.gz`   
 `tar -zxvf kafka_exporter-1.2.0.darwin-amd64.tar.gz`  
@@ -71,6 +71,28 @@
     ![导入Dashboard](https://github.com/RachelLXT/kafka-demo/raw/master/doc/pic/import2.png) 
     
     ![导入Dashboard](https://github.com/RachelLXT/kafka-demo/raw/master/doc/pic/dashboard.png)  
-    
 
+----
 
+### kafka+binlog增量同步数据  
+
+- 建表+数据备份与恢复
+
+````
+  mkdir ./doc/sql
+  # 数据备份
+  mysqldump -uroot -p demo --tables cms_blog > ./doc/sql/cms_blog.sql
+  # 数据恢复
+  mysql -uroot -p demo < ./doc/sql/cms_blog.sql                         
+````
+
+- 添加binlog依赖
+````
+    <dependency>
+        <groupId>com.github.shyiko</groupId>
+        <artifactId>mysql-binlog-connector-java</artifactId>
+        <version>0.21.0</version>
+    </dependency>
+````
+
+- 
