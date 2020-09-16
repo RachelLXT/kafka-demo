@@ -8,15 +8,19 @@ import org.apache.ibatis.annotations.Update;
 /**
  * @author lixt90
  */
-public interface CmsBlogDumpMapper {
+public interface CmsBlogDumpMapper extends BaseMapper<CmsBlogDump> {
 
+
+    @Override
     @Delete("delete from cms_blog_dump where id = #{id}")
     int deleteByPrimaryKey(Integer id);
 
+    @Override
     @Insert({"insert into cms_blog_dump(id, title, author, content, add_time, update_time, deleted) ",
             "values(#{id}, #{title}, #{author}, #{content}, #{addTime}, #{updateTime}, #{deleted})"})
     int insert(CmsBlogDump record);
 
+    @Override
     @Update({"update cms_blog_dump set title = #{title}, author = #{author}, ",
             "content = #{content}, add_time = #{addTime}, update_time = #{updateTime}, deleted = #{deleted} ",
             "where id = #{id}"})

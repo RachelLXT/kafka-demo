@@ -2,8 +2,9 @@ package com.lxt.kafka.demo.sender;
 
 import com.alibaba.fastjson.JSON;
 import com.lxt.kafka.demo.bo.KafkaData;
-import com.lxt.kafka.demo.dao.CmsBlogDumpMapper;
-import com.lxt.kafka.demo.po.CmsBlogDump;
+import com.lxt.kafka.demo.dao.BaseMapper;
+import com.lxt.kafka.demo.dao.MapperHolder;
+import com.lxt.kafka.demo.enums.MapperEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -19,6 +20,7 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @Service("kafkaSender")
+@SuppressWarnings({"all"})
 public class KafkaSenderImpl implements Sender {
 
     private static final String MY_FIRST_TOPIC = "my-first-topic";
@@ -26,8 +28,6 @@ public class KafkaSenderImpl implements Sender {
 
     @Resource
     private KafkaTemplate<String, String> kafkaTemplate;
-    @Resource
-    private CmsBlogDumpMapper cmsBlogDumpMapper;
 
     @Override
     public void send(String msg) {
@@ -47,24 +47,30 @@ public class KafkaSenderImpl implements Sender {
             return;
         }
         KafkaData kafkaData = JSON.parseObject(record.value().toString(), KafkaData.class);
+        MapperEnum mapperEnum = MapperEnum.find(kafkaData.getDbname(), kafkaData.getTbname());
+        if (mapperEnum == null) {
+            return;
+        }
+        BaseMapper baseMapper = MapperHolder.find(mapperEnum.getMapper());
+
         switch (kafkaData.getOptionType()) {
             case DELETE:
                 kafkaData.getBefore().forEach(map -> {
-                    String id = map.get("id");
-                    cmsBlogDumpMapper.deleteByPrimaryKey(Integer.valueOf(id));
+                    String id = map.get(mapperEnum.getPrimaryKey());
+                    baseMapper.deleteByPrimaryKey(Integer.valueOf(id));
                 });
                 break;
 
             case INSERT:
                 kafkaData.getAfter().forEach(map -> {
-                    CmsBlogDump cmsBlogDump = JSON.parseObject(JSON.toJSONString(map), CmsBlogDump.class);
-                    cmsBlogDumpMapper.insert(cmsBlogDump);
+                    Class<?> clazz = mapperEnum.getPo();
+                    baseMapper.insert(JSON.parseObject(JSON.toJSONString(map), clazz));
                 });
                 break;
             case UPDATE:
                 kafkaData.getAfter().forEach(map -> {
-                    CmsBlogDump cmsBlogDump = JSON.parseObject(JSON.toJSONString(map), CmsBlogDump.class);
-                    cmsBlogDumpMapper.updateByPrimaryKey(cmsBlogDump);
+                    Class<?> clazz = mapperEnum.getPo();
+                    baseMapper.updateByPrimaryKey(JSON.parseObject(JSON.toJSONString(map), clazz));
                 });
                 break;
             default:
