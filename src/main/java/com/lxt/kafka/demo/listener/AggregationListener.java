@@ -1,6 +1,5 @@
 package com.lxt.kafka.demo.listener;
 
-import com.alibaba.fastjson.JSON;
 import com.github.shyiko.mysql.binlog.BinaryLogClient;
 import com.github.shyiko.mysql.binlog.event.Event;
 import com.github.shyiko.mysql.binlog.event.EventData;
@@ -68,7 +67,11 @@ public class AggregationListener implements BinaryLogClient.EventListener {
                 if (StringUtils.isEmpty(columnName)) {
                     continue;
                 }
-                map.put(columnName, row[i].toString());
+                if (row[i] instanceof byte[]) {
+                    map.put(columnName, new String((byte[]) row[i]));
+                } else {
+                    map.put(columnName, row[i].toString());
+                }
             }
             list.add(map);
         }
