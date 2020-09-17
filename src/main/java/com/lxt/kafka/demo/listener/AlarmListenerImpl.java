@@ -15,6 +15,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 /**
+ * 告警监听器，监听cms_blog表的删除操作
+ *
  * @author lixt90
  */
 @Slf4j

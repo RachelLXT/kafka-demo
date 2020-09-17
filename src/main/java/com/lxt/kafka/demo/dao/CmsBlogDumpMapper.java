@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Update;
 
 /**
+ * kafka消费者客户端落数据用的mapper
  * @author lixt90
  */
 public interface CmsBlogDumpMapper extends BaseMapper<CmsBlogDump> {

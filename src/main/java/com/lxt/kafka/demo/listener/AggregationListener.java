@@ -24,6 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 /**
+ * 聚合监听器
+ *
  * @author lixt90
  */
 @Slf4j
@@ -39,6 +41,13 @@ public class AggregationListener implements BinaryLogClient.EventListener {
     @Resource
     private ColumnsMapper columnsMapper;
 
+    /**
+     * 监听器注册
+     *
+     * @param tableEnum 数据源需要监听器的数据库与表名
+     * @param holder    table info
+     * @param listener  监听器
+     */
     public void register(TableEnum tableEnum, AbstractTableHolder holder, Listener listener) {
         String tableMapKey = genTableMapKey(tableEnum.getDbname(), tableEnum.getTbname(), listener.getClass().getSimpleName());
         List<Columns> list = columnsMapper.selectByDbnameAndTbname(tableEnum.getDbname(), tableEnum.getTbname());
@@ -51,6 +60,15 @@ public class AggregationListener implements BinaryLogClient.EventListener {
         log.info("register success: tableMapKey={}", tableMapKey);
     }
 
+    /**
+     * binlog消息<columnIndex, columnValue>转换成<columnName, columnValue>
+     *
+     * @param rows binlog消息
+     * @param dbname
+     * @param tbname
+     * @param listener
+     * @return List<map < columnName, columnValue>>
+     */
     public List<Map<String, String>> toMap(List<Serializable[]> rows, String dbname, String tbname, Listener listener) {
         String tableMapKey = genTableMapKey(dbname, tbname, listener.getClass().getSimpleName());
         Table table = tableMap.get(tableMapKey);

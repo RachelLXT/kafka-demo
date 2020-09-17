@@ -95,4 +95,43 @@
     </dependency>
 ````
 
-- 
+- mysql查看binlog日志
+
+  ```mysql
+  # mysql v8 报错：
+  # com.github.shyiko.mysql.binlog.network.AuthenticationException:
+  # Client does not support authentication protocol requested by server; consider upgrading MySQL client
+  
+  select version();
+  
+  alter user 'root'@'localhost' identified with mysql_native_password by 'lxtykx0106';
+  flush privileges;
+  
+  
+  ########################################################################################################################
+  
+  # 开关
+  show variables like 'log_bin';
+  # 格式
+  show variables like 'binlog_format';
+  # 所有binlog文件
+  show master logs;
+  # 当前日志以及最后一个事件结束的位置
+  show master status;
+  # 事件
+  show binlog events;
+  show binlog events in 'binlog.000010';
+  ```
+
+
+
+- 系统功能
+
+  - Alarm监听器告警cms_blog表的DELETE操作
+
+  - Kafka监听器监听所有cms_blog表的INSERT/UPDATE/DELETE数据
+
+  - Kafka生产者:增量同步数据，Kafka消费者:数据落表
+
+    ![类图](https://github.com/RachelLXT/kafka-demo/raw/master/doc/pic/kafka-demo.png)
+

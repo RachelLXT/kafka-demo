@@ -29,6 +29,11 @@ public class KafkaSenderImpl implements Sender {
     @Resource
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    /**
+     * kafka生产者
+     *
+     * @param msg
+     */
     @Override
     public void send(String msg) {
         try {
@@ -41,6 +46,11 @@ public class KafkaSenderImpl implements Sender {
         }
     }
 
+    /**
+     * kafka消费者
+     *
+     * @param record
+     */
     @KafkaListener(topics = {MY_FIRST_TOPIC}, groupId = GROUP)
     public void consume(ConsumerRecord<?, ?> record) {
         if (record == null) {

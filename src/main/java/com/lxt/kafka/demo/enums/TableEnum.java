@@ -1,6 +1,8 @@
 package com.lxt.kafka.demo.enums;
 
 /**
+ * 数据源需要监听器的数据库与表名
+ *
  * @author lixt90
  */
 public enum TableEnum {

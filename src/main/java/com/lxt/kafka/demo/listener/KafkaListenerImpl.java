@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * kafka消息监听器，监听cms_blog表，发送所有cms_blog表INSERT/UPDATE/DELETE日志
+ *
  * @author lixt90
  */
 @Slf4j

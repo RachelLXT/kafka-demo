@@ -9,6 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
+ * kafka消费者客户端mapper存取
+ *
  * @author lixt90
  */
 @Component
