@@ -16,6 +16,5 @@ public class KafkaData implements BinlogData {
     private String tbname;
     private OptionType optionType;
 
-    private List<Map<String, String>> before;
-    private List<Map<String, String>> after;
+    private List<Map<String, String>> data;
 }

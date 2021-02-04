@@ -152,11 +152,11 @@ public class AggregationListener implements BinaryLogClient.EventListener {
     }
 
     private String genTableMapKey(String dbname, String tbname, String listener) {
-        return dbname + "." + tbname + ":" + listener;
+        return dbname + '.' + tbname + ':' + listener;
     }
 
     private String genTableListenerMapKey(String dbname, String tbname) {
-        return dbname + "." + tbname;
+        return dbname + '.' + tbname;
     }
 
     private <K, V> V getOrCreate(K key, Map<K, V> map, Supplier<V> factory) {

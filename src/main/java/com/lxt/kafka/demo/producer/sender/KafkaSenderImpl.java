@@ -1,5 +1,8 @@
 package com.lxt.kafka.demo.producer.sender;
 
+import com.alibaba.fastjson.JSON;
+import com.lxt.kafka.demo.bo.BinlogData;
+import com.lxt.kafka.demo.bo.KafkaData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -17,7 +20,6 @@ import javax.annotation.Resource;
 public class KafkaSenderImpl implements Sender {
 
     private static final String MY_FIRST_TOPIC = "my-first-topic";
-    private static final String GROUP = "Dump";
 
     @Resource
     private KafkaTemplate<String, String> kafkaTemplate;
@@ -28,9 +30,12 @@ public class KafkaSenderImpl implements Sender {
      * @param msg
      */
     @Override
-    public void send(String msg) {
+    public void send(BinlogData binlogData) {
         try {
-            ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(MY_FIRST_TOPIC, msg);
+            KafkaData kafkaData = (KafkaData) binlogData;
+            String topic = kafkaData.getDbname() + '.' + kafkaData.getTbname();
+            String msg = JSON.toJSONString(kafkaData);
+            ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, msg);
             SendResult<String, String> result = future.get();
             log.info("send msg:{}, topic:{}, partition:{}, key:{}", msg, result.getProducerRecord().topic(),
                     result.getProducerRecord().partition(), result.getProducerRecord().key());

@@ -17,15 +17,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaReceiver {
 
-    private static final String MY_FIRST_TOPIC = "my-first-topic";
-    private static final String GROUP = "Dump";
 
     /**
      * kafka消费者
      *
      * @param record
      */
-    @KafkaListener(topics = {MY_FIRST_TOPIC}, groupId = GROUP)
+    @KafkaListener(topics = {"demo.cms_blog"}, groupId = "Dump")
     public void consume(ConsumerRecord<?, ?> record) {
         if (record == null) {
             return;
@@ -35,24 +33,24 @@ public class KafkaReceiver {
         if (mapperEnum == null) {
             return;
         }
-        BaseMapper baseMapper = MapperHolder.find(mapperEnum.getMapper());
+        BaseMapper<Object> baseMapper = MapperHolder.find(mapperEnum.getMapper());
 
         switch (kafkaData.getOptionType()) {
             case DELETE:
-                kafkaData.getBefore().forEach(map -> {
+                kafkaData.getData().forEach(map -> {
                     String id = map.get(mapperEnum.getPrimaryKey());
                     baseMapper.deleteByPrimaryKey(Integer.valueOf(id));
                 });
                 break;
 
             case INSERT:
-                kafkaData.getAfter().forEach(map -> {
+                kafkaData.getData().forEach(map -> {
                     Class<?> clazz = mapperEnum.getPo();
                     baseMapper.insert(JSON.parseObject(JSON.toJSONString(map), clazz));
                 });
                 break;
             case UPDATE:
-                kafkaData.getAfter().forEach(map -> {
+                kafkaData.getData().forEach(map -> {
                     Class<?> clazz = mapperEnum.getPo();
                     baseMapper.updateByPrimaryKey(JSON.parseObject(JSON.toJSONString(map), clazz));
                 });
@@ -60,6 +58,6 @@ public class KafkaReceiver {
             default:
                 break;
         }
-        log.info("Consumer-Group-{} consume kafka data:{}", GROUP, kafkaData);
+        log.info("Topic=[demo.cms_blog], GroupId=[Dump], consume kafka data:{}", kafkaData);
     }
 }

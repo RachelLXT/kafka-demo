@@ -41,6 +41,7 @@ public class KafkaDemo {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
             kafkaTemplate.send(MY_GROUP_TOPIC, i % 3, "sendKey", "message" + i);
         }

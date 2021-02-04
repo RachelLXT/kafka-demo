@@ -1,6 +1,5 @@
 package com.lxt.kafka.demo.producer.sender;
 
-import com.alibaba.fastjson.JSON;
 import com.lxt.kafka.demo.bo.KafkaData;
 import com.lxt.kafka.demo.producer.enums.OptionType;
 import org.junit.jupiter.api.Test;
@@ -33,8 +32,8 @@ class KafkaSenderImplTest {
         kafkaData.setDbname("demo");
         kafkaData.setTbname("test");
         kafkaData.setOptionType(OptionType.INSERT);
-        kafkaData.setAfter(Collections.singletonList(map));
+        kafkaData.setData(Collections.singletonList(map));
 
-        kafkaSender.send(JSON.toJSONString(kafkaData));
+        kafkaSender.send(kafkaData);
     }
 }

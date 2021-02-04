@@ -1,6 +1,5 @@
 package com.lxt.kafka.demo.producer.listener;
 
-import com.alibaba.fastjson.JSON;
 import com.github.shyiko.mysql.binlog.event.DeleteRowsEventData;
 import com.github.shyiko.mysql.binlog.event.EventData;
 import com.github.shyiko.mysql.binlog.event.UpdateRowsEventData;
@@ -38,32 +37,31 @@ public class KafkaListenerImpl implements Listener {
     @Override
     @PostConstruct
     public void register() {
-       aggregationListener.register(this);
+        aggregationListener.register(this);
     }
 
     @Override
     public BinlogData converter(EventData eventData, String dbname, String tbname, OptionType optionType) {
-        List<Map<String, String>> before = null;
-        List<Map<String, String>> after = null;
+        List<Map<String, String>> data;
 
         switch (optionType) {
             case UPDATE:
                 UpdateRowsEventData updateRowsEventData = (UpdateRowsEventData) eventData;
-                after = aggregationListener.toMap(updateRowsEventData.getRows().stream().map(Map.Entry::getValue).collect(Collectors.toList()), dbname, tbname, this);
+                data = aggregationListener.toMap(updateRowsEventData.getRows().stream().map(Map.Entry::getValue).collect(Collectors.toList()), dbname, tbname, this);
                 break;
             case INSERT:
                 WriteRowsEventData writeRowsEventData = (WriteRowsEventData) eventData;
-                after = aggregationListener.toMap(writeRowsEventData.getRows(), dbname, tbname, this);
+                data = aggregationListener.toMap(writeRowsEventData.getRows(), dbname, tbname, this);
                 break;
             case DELETE:
                 DeleteRowsEventData deleteRowsEventData = (DeleteRowsEventData) eventData;
-                before = aggregationListener.toMap(deleteRowsEventData.getRows(), dbname, tbname, this);
+                data = aggregationListener.toMap(deleteRowsEventData.getRows(), dbname, tbname, this);
                 break;
             default:
                 return null;
         }
 
-        if (CollectionUtils.isEmpty(before) && CollectionUtils.isEmpty(after)) {
+        if (CollectionUtils.isEmpty(data)) {
             return null;
         }
 
@@ -71,8 +69,7 @@ public class KafkaListenerImpl implements Listener {
         kafkaData.setDbname(dbname);
         kafkaData.setTbname(tbname);
         kafkaData.setOptionType(optionType);
-        kafkaData.setBefore(before);
-        kafkaData.setAfter(after);
+        kafkaData.setData(data);
 
         return kafkaData;
     }
@@ -81,6 +78,6 @@ public class KafkaListenerImpl implements Listener {
     @Override
     public void onEvent(BinlogData binlogData) {
         log.debug("kafkaListener-->{}", binlogData);
-        kafkaSender.send(JSON.toJSONString(binlogData));
+        kafkaSender.send(binlogData);
     }
 }

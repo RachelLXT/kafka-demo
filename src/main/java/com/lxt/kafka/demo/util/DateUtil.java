@@ -14,6 +14,10 @@ import java.util.Locale;
 @Slf4j
 public class DateUtil {
 
+    private DateUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static final String PATTERN_ON_WEEK = "EEE MMM dd HH:mm:ss zzz yyyy";
     public static final String PATTERN_ON_DATE = "yyyy-MM-dd";
     public static final String PATTERN_ON_SECOND = "yyyy-MM-dd HH:mm:ss";
