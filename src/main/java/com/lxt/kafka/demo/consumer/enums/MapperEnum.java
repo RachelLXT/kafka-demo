@@ -1,7 +1,7 @@
-package com.lxt.kafka.demo.enums;
+package com.lxt.kafka.demo.consumer.enums;
 
-import com.lxt.kafka.demo.dao.CmsBlogDumpMapper;
-import com.lxt.kafka.demo.po.CmsBlogDump;
+import com.lxt.kafka.demo.consumer.dao.CmsBlogDumpMapper;
+import com.lxt.kafka.demo.consumer.po.CmsBlogDump;
 
 /**
  * kafka消费者客户端mapper映射关系

@@ -1,6 +1,6 @@
 package com.lxt.kafka.demo.bo;
 
-import com.lxt.kafka.demo.enums.OptionType;
+import com.lxt.kafka.demo.producer.enums.OptionType;
 import lombok.Data;
 
 import java.util.List;

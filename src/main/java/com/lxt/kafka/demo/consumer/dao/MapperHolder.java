@@ -1,4 +1,4 @@
-package com.lxt.kafka.demo.dao;
+package com.lxt.kafka.demo.consumer.dao;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

@@ -1,6 +1,6 @@
-package com.lxt.kafka.demo.dao;
+package com.lxt.kafka.demo.producer.dao;
 
-import com.lxt.kafka.demo.po.Columns;
+import com.lxt.kafka.demo.producer.po.Columns;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 

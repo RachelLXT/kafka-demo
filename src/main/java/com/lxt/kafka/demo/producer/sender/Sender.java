@@ -1,4 +1,4 @@
-package com.lxt.kafka.demo.sender;
+package com.lxt.kafka.demo.producer.sender;
 
 /**
  * @author lixt90

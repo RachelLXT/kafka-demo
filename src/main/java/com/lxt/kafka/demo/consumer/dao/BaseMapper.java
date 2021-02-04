@@ -1,4 +1,4 @@
-package com.lxt.kafka.demo.dao;
+package com.lxt.kafka.demo.consumer.dao;
 
 
 /**

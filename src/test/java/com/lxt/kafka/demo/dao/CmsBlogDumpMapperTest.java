@@ -1,8 +1,7 @@
 package com.lxt.kafka.demo.dao;
 
-import java.util.Date;
-
-import com.lxt.kafka.demo.po.CmsBlogDump;
+import com.lxt.kafka.demo.consumer.dao.CmsBlogDumpMapper;
+import com.lxt.kafka.demo.consumer.po.CmsBlogDump;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,8 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Date;
 
 /**
  * @author lixt90

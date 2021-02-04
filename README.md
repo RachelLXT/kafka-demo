@@ -127,11 +127,11 @@
 
 - 系统功能
 
-  - Alarm监听器告警cms_blog表的DELETE操作
+    - 表`binlog_table_registry`：持久化所有需要监听的表信息（包括表名、需要监听的字段，以及对应的监听器）
 
-  - Kafka监听器监听所有cms_blog表的INSERT/UPDATE/DELETE数据
+    - 监听器：
+        - Alarm监听器告警注册表的DELETE操作
+        - Kafka监听器监听注册表的INSERT/UPDATE/DELETE数据
 
   - Kafka生产者:增量同步数据，Kafka消费者:数据落表
-
-    ![类图](https://github.com/RachelLXT/kafka-demo/raw/master/doc/pic/kafka-demo.png)
 

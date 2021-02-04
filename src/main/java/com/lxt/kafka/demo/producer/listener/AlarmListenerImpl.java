@@ -1,18 +1,15 @@
-package com.lxt.kafka.demo.listener;
+package com.lxt.kafka.demo.producer.listener;
 
 import com.github.shyiko.mysql.binlog.event.DeleteRowsEventData;
 import com.github.shyiko.mysql.binlog.event.EventData;
 import com.lxt.kafka.demo.bo.AlarmData;
 import com.lxt.kafka.demo.bo.BinlogData;
-import com.lxt.kafka.demo.enums.OptionType;
-import com.lxt.kafka.demo.enums.TableEnum;
-import com.lxt.kafka.demo.table.CmsBlogTable;
+import com.lxt.kafka.demo.producer.enums.OptionType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 
 /**
  * 告警监听器，监听cms_blog表的删除操作
@@ -26,13 +23,12 @@ public class AlarmListenerImpl implements Listener {
 
     @Autowired
     private AggregationListener aggregationListener;
-    @Resource
-    private CmsBlogTable cmsBlogTable;
+
 
     @Override
     @PostConstruct
     public void register() {
-        aggregationListener.register(TableEnum.CMS_BLOG_TABLE, cmsBlogTable, this);
+        aggregationListener.register(this);
     }
 
     @Override

@@ -1,10 +1,10 @@
-package com.lxt.kafka.demo.po;
-
-import java.io.Serializable;
-import java.util.Date;
+package com.lxt.kafka.demo.consumer.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.util.Date;
 
 
 /**

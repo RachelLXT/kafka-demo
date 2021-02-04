@@ -1,8 +1,8 @@
-package com.lxt.kafka.demo.sender;
+package com.lxt.kafka.demo.producer.sender;
 
 import com.alibaba.fastjson.JSON;
 import com.lxt.kafka.demo.bo.KafkaData;
-import com.lxt.kafka.demo.enums.OptionType;
+import com.lxt.kafka.demo.producer.enums.OptionType;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

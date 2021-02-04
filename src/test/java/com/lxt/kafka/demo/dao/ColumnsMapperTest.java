@@ -1,16 +1,14 @@
 package com.lxt.kafka.demo.dao;
 
-import com.lxt.kafka.demo.po.Columns;
+import com.lxt.kafka.demo.producer.dao.ColumnsMapper;
+import com.lxt.kafka.demo.producer.po.Columns;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author lixt90

@@ -1,6 +1,6 @@
-package com.lxt.kafka.demo.dao;
+package com.lxt.kafka.demo.consumer.dao;
 
-import com.lxt.kafka.demo.po.CmsBlogDump;
+import com.lxt.kafka.demo.consumer.po.CmsBlogDump;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Update;

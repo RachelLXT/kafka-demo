@@ -1,4 +1,4 @@
-package com.lxt.kafka.demo.po;
+package com.lxt.kafka.demo.producer.po;
 
 import lombok.Data;
 

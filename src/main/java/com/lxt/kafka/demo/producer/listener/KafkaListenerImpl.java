@@ -1,4 +1,4 @@
-package com.lxt.kafka.demo.listener;
+package com.lxt.kafka.demo.producer.listener;
 
 import com.alibaba.fastjson.JSON;
 import com.github.shyiko.mysql.binlog.event.DeleteRowsEventData;
@@ -7,10 +7,8 @@ import com.github.shyiko.mysql.binlog.event.UpdateRowsEventData;
 import com.github.shyiko.mysql.binlog.event.WriteRowsEventData;
 import com.lxt.kafka.demo.bo.BinlogData;
 import com.lxt.kafka.demo.bo.KafkaData;
-import com.lxt.kafka.demo.enums.OptionType;
-import com.lxt.kafka.demo.enums.TableEnum;
-import com.lxt.kafka.demo.sender.Sender;
-import com.lxt.kafka.demo.table.CmsBlogTable;
+import com.lxt.kafka.demo.producer.enums.OptionType;
+import com.lxt.kafka.demo.producer.sender.Sender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,8 +29,6 @@ import java.util.stream.Collectors;
 @Component
 public class KafkaListenerImpl implements Listener {
 
-    @Resource
-    private CmsBlogTable cmsBlogTable;
     @Autowired
     private AggregationListener aggregationListener;
     @Autowired
@@ -43,7 +38,7 @@ public class KafkaListenerImpl implements Listener {
     @Override
     @PostConstruct
     public void register() {
-        aggregationListener.register(TableEnum.CMS_BLOG_TABLE, cmsBlogTable, this);
+       aggregationListener.register(this);
     }
 
     @Override

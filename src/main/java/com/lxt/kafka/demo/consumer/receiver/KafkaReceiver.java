@@ -1,50 +1,24 @@
-package com.lxt.kafka.demo.sender;
+package com.lxt.kafka.demo.consumer.receiver;
 
 import com.alibaba.fastjson.JSON;
 import com.lxt.kafka.demo.bo.KafkaData;
-import com.lxt.kafka.demo.dao.BaseMapper;
-import com.lxt.kafka.demo.dao.MapperHolder;
-import com.lxt.kafka.demo.enums.MapperEnum;
+import com.lxt.kafka.demo.consumer.dao.BaseMapper;
+import com.lxt.kafka.demo.consumer.dao.MapperHolder;
+import com.lxt.kafka.demo.consumer.enums.MapperEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
-import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
-
-import javax.annotation.Resource;
+import org.springframework.stereotype.Component;
 
 /**
  * @author lixt90
  */
 @Slf4j
-@Service("kafkaSender")
-@SuppressWarnings({"all"})
-public class KafkaSenderImpl implements Sender {
+@Component
+public class KafkaReceiver {
 
     private static final String MY_FIRST_TOPIC = "my-first-topic";
     private static final String GROUP = "Dump";
-
-    @Resource
-    private KafkaTemplate<String, String> kafkaTemplate;
-
-    /**
-     * kafka生产者
-     *
-     * @param msg
-     */
-    @Override
-    public void send(String msg) {
-        try {
-            ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(MY_FIRST_TOPIC, msg);
-            SendResult<String, String> result = future.get();
-            log.info("send msg:{}, topic:{}, partition:{}, key:{}", msg, result.getProducerRecord().topic(),
-                    result.getProducerRecord().partition(), result.getProducerRecord().key());
-        } catch (Exception e) {
-            log.error("kafka send msg fail:{}", e.getMessage(), e);
-        }
-    }
 
     /**
      * kafka消费者
@@ -88,5 +62,4 @@ public class KafkaSenderImpl implements Sender {
         }
         log.info("Consumer-Group-{} consume kafka data:{}", GROUP, kafkaData);
     }
-
 }

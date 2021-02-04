@@ -1,4 +1,4 @@
-package com.lxt.kafka.demo.enums;
+package com.lxt.kafka.demo.producer.enums;
 
 import com.github.shyiko.mysql.binlog.event.EventType;
 

@@ -1,4 +1,5 @@
-package com.lxt.kafka.demo.listener;
+package com.lxt.kafka.demo.producer.listener;
+
 
 import com.github.shyiko.mysql.binlog.BinaryLogClient;
 import com.github.shyiko.mysql.binlog.event.Event;
@@ -6,16 +7,16 @@ import com.github.shyiko.mysql.binlog.event.EventData;
 import com.github.shyiko.mysql.binlog.event.EventType;
 import com.github.shyiko.mysql.binlog.event.TableMapEventData;
 import com.lxt.kafka.demo.bo.BinlogData;
-import com.lxt.kafka.demo.dao.ColumnsMapper;
-import com.lxt.kafka.demo.enums.OptionType;
-import com.lxt.kafka.demo.enums.TableEnum;
-import com.lxt.kafka.demo.po.Columns;
-import com.lxt.kafka.demo.table.AbstractTableHolder;
-import com.lxt.kafka.demo.table.Table;
+import com.lxt.kafka.demo.producer.dao.BinlogTableRegistryMapper;
+import com.lxt.kafka.demo.producer.dao.ColumnsMapper;
+import com.lxt.kafka.demo.producer.enums.OptionType;
+import com.lxt.kafka.demo.producer.po.BinlogTableRegistry;
+import com.lxt.kafka.demo.producer.po.Columns;
+import com.lxt.kafka.demo.producer.po.Table;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
@@ -40,37 +41,60 @@ public class AggregationListener implements BinaryLogClient.EventListener {
 
     @Resource
     private ColumnsMapper columnsMapper;
+    @Resource
+    private BinlogTableRegistryMapper tableRegistryMapper;
 
     /**
      * 监听器注册
      *
-     * @param tableEnum 数据源需要监听器的数据库与表名
-     * @param holder    table info
-     * @param listener  监听器
+     * @param listener 监听器
      */
-    public void register(TableEnum tableEnum, AbstractTableHolder holder, Listener listener) {
-        String tableMapKey = genTableMapKey(tableEnum.getDbname(), tableEnum.getTbname(), listener.getClass().getSimpleName());
-        List<Columns> list = columnsMapper.selectByDbnameAndTbname(tableEnum.getDbname(), tableEnum.getTbname());
-        if (CollectionUtils.isEmpty(list)) {
-            log.error("register fail: tableMapKey={}", tableMapKey);
+    public void register(Listener listener) {
+        String listenerKey = listener.getClass().getName();
+        List<BinlogTableRegistry> registries = tableRegistryMapper.selectByListener(listenerKey);
+        if (CollectionUtils.isEmpty(registries)) {
+            log.error("no data for listener:[{}] in table:binlog_table_registry", listener.getClass().getName());
         }
-        tableMap.put(tableMapKey, holder.toTable(list));
-        List<Listener> listenerList = getOrCreate(genTableListenerMapKey(tableEnum.getDbname(), tableEnum.getTbname()), tableListenerMap, ArrayList::new);
-        listenerList.add(listener);
-        log.info("register success: tableMapKey={}", tableMapKey);
+
+        // <dbname.tableName, customizeFields>
+        Map<String, Set<String>> map = new HashMap<>(8);
+        for (BinlogTableRegistry registry : registries) {
+            String schemaAndTableKey = registry.getTableSchema() + "." + registry.getTableName();
+            Set<String> customizeFields = getOrCreate(schemaAndTableKey, map, HashSet::new);
+            customizeFields.add(registry.getColumnName());
+        }
+
+        for (Map.Entry<String, Set<String>> customizeFieldsEntry : map.entrySet()) {
+            String[] schemaAndTable = customizeFieldsEntry.getKey().split("\\.");
+            Table table = Table.builder()
+                    .dbname(schemaAndTable[0])
+                    .tbname(schemaAndTable[1])
+                    .build();
+            List<Columns> totalColumns = columnsMapper.selectByDbnameAndTbname(table.getDbname(), table.getTbname());
+            String tableMapKey = genTableMapKey(table.getDbname(), table.getTbname(), listenerKey);
+            if (CollectionUtils.isEmpty(totalColumns)) {
+                log.error("register fail: tableMapKey={}", tableMapKey);
+                continue;
+            }
+            table.customizeRegisterFields(totalColumns, customizeFieldsEntry.getValue());
+            tableMap.put(tableMapKey, table);
+            List<Listener> listenerList = getOrCreate(genTableListenerMapKey(table.getDbname(), table.getTbname()), tableListenerMap, ArrayList::new);
+            listenerList.add(listener);
+            log.info("register success: tableMapKey={}", tableMapKey);
+        }
     }
 
     /**
      * binlog消息<columnIndex, columnValue>转换成<columnName, columnValue>
      *
-     * @param rows binlog消息
+     * @param rows     binlog消息
      * @param dbname
      * @param tbname
      * @param listener
      * @return List<map < columnName, columnValue>>
      */
     public List<Map<String, String>> toMap(List<Serializable[]> rows, String dbname, String tbname, Listener listener) {
-        String tableMapKey = genTableMapKey(dbname, tbname, listener.getClass().getSimpleName());
+        String tableMapKey = genTableMapKey(dbname, tbname, listener.getClass().getName());
         Table table = tableMap.get(tableMapKey);
         if (table == null) {
             log.error("table not exists:{}", tableMapKey);

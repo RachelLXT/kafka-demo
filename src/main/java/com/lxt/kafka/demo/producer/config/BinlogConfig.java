@@ -1,11 +1,11 @@
-package com.lxt.kafka.demo.config;
+package com.lxt.kafka.demo.producer.config;
 
 import com.github.shyiko.mysql.binlog.BinaryLogClient;
 import com.github.shyiko.mysql.binlog.event.DeleteRowsEventData;
 import com.github.shyiko.mysql.binlog.event.EventData;
 import com.github.shyiko.mysql.binlog.event.UpdateRowsEventData;
 import com.github.shyiko.mysql.binlog.event.WriteRowsEventData;
-import com.lxt.kafka.demo.listener.AggregationListener;
+import com.lxt.kafka.demo.producer.listener.AggregationListener;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
