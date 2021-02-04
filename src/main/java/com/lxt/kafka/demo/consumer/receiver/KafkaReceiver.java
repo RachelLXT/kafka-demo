@@ -7,8 +7,12 @@ import com.lxt.kafka.demo.consumer.dao.MapperHolder;
 import com.lxt.kafka.demo.consumer.enums.MapperEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author lixt90
@@ -44,10 +48,7 @@ public class KafkaReceiver {
                 break;
 
             case INSERT:
-                kafkaData.getData().forEach(map -> {
-                    Class<?> clazz = mapperEnum.getPo();
-                    baseMapper.insert(JSON.parseObject(JSON.toJSONString(map), clazz));
-                });
+                handleInsert(kafkaData.getData(), mapperEnum.getPo(), baseMapper);
                 break;
             case UPDATE:
                 kafkaData.getData().forEach(map -> {
@@ -59,5 +60,13 @@ public class KafkaReceiver {
                 break;
         }
         log.info("Topic=[demo.cms_blog], GroupId=[Dump], consume kafka data:{}", kafkaData);
+    }
+
+    private void handleInsert(List<Map<String, String>> data, Class<?> clazz, BaseMapper<Object> baseMapper) {
+        try {
+            data.forEach(map -> baseMapper.insert(JSON.parseObject(JSON.toJSONString(map), clazz)));
+        } catch (DuplicateKeyException e) {
+            log.info("insert ignore");
+        }
     }
 }
